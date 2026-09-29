@@ -1215,21 +1215,26 @@ def _transcribe_faster_whisper(wav: str, out_dir: str, lang: str | None, model: 
         from faster_whisper import WhisperModel
     except ImportError:
         return GATE_ERROR, None
-    try:
-        m = WhisperModel(model, device="auto", compute_type="auto")
-        # vad_filter: Silero VAD gates what reaches the model — whisper's classic
-        # hallucination is inventing a caption over music/silence (observed: an 8s
-        # music-only clip yielding "I'll see you next time"). No speech → nothing
-        # to transcribe → nothing to invent. condition_on_previous_text=False cuts
-        # the other failure mode, repetition loops seeded by an earlier bad line.
-        seg_iter, _info = m.transcribe(
-            wav, language=(lang if lang and lang != "auto" else None),
-            vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
-            condition_on_previous_text=False)
-        segs = [{"start": round(s.start, 3), "end": round(s.end, 3), "text": s.text.strip()}
-                for s in seg_iter if s.text.strip()]
-    except Exception as e:  # bad model name, OOM, corrupt audio — CLI may still work
-        print(f"  ! faster-whisper failed (model={model}): {e}")
+    # "auto" picks CUDA whenever an NVIDIA GPU is visible, even if the CUDA
+    # runtime libraries (cuBLAS/cuDNN) are missing — retry on CPU in that case.
+    for device, compute_type in (("auto", "auto"), ("cpu", "int8")):
+        try:
+            m = WhisperModel(model, device=device, compute_type=compute_type)
+            # vad_filter: Silero VAD gates what reaches the model — whisper's classic
+            # hallucination is inventing a caption over music/silence (observed: an 8s
+            # music-only clip yielding "I'll see you next time"). No speech → nothing
+            # to transcribe → nothing to invent. condition_on_previous_text=False cuts
+            # the other failure mode, repetition loops seeded by an earlier bad line.
+            seg_iter, _info = m.transcribe(
+                wav, language=(lang if lang and lang != "auto" else None),
+                vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
+                condition_on_previous_text=False)
+            segs = [{"start": round(s.start, 3), "end": round(s.end, 3), "text": s.text.strip()}
+                    for s in seg_iter if s.text.strip()]
+            break
+        except Exception as e:  # bad model name, OOM, corrupt audio — CLI may still work
+            print(f"  ! faster-whisper failed (model={model}, device={device}): {e}")
+    else:
         return GATE_ERROR, None
     if not segs:
         # The gate ran and found NO speech — that is a result, not a failure.
