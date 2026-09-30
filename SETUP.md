@@ -9,8 +9,6 @@ This fork adds:
 - a **clickable transcript page** (`viewer.html`): click any line and the video jumps there
 - automatic **CPU fallback**, so it still works on computers without an NVIDIA graphics card
 
-> This repo is **private**. Don't share it or make it public.
-
 ---
 
 ## Option A: let the AI install it for you (easiest)
@@ -20,7 +18,7 @@ This fork adds:
 3. Copy this whole box and paste it in, then press Enter:
 
 ```
-Please install the claude-real-video tool for me from my private GitHub repo
+Please install the claude-real-video tool for me from the GitHub repo
 lucorpmedia/lucorp-claude-video. Steps:
 1. Check Python 3.10+ is installed (install Python 3.12 if not). On Windows make sure
    `python` points at the real Python, not some other app's venv.
@@ -51,7 +49,7 @@ Explain each step to me in plain English as you go.
 
 Close and reopen your terminal after steps 1 and 2.
 
-**3. Install the tool.** You need to be logged in to GitHub with access to this repo (`gh auth login`).
+**3. Install the tool.**
 ```
 pip install "claude-real-video[fast] @ git+https://github.com/lucorpmedia/lucorp-claude-video.git"
 ```
