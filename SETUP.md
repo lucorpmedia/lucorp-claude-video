@@ -163,7 +163,7 @@ one per few lessons".
 
 ### 5. Recorded call → action items + memory
 ```
-Transcribe this call with --speakers: C:\Videos	eam-call.mp4
+Transcribe this call with --speakers: C:\Videos\team-call.mp4
 Who said what, decisions made, action items with owners and due dates,
 and anything that changes our earlier plan. Save the decisions to my notes.
 ```
