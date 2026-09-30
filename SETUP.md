@@ -11,6 +11,30 @@ This fork adds:
 
 ---
 
+## Step by step with pictures (Windows)
+
+*Illustrations of each screen. Your paths and version numbers may look a little different.*
+
+**1. Make a new folder for it.**
+![Step 1: make a folder](docs/setup/step-1.png)
+
+**2. Open that folder in a terminal and download the repo.**
+![Step 2: git clone](docs/setup/step-2.png)
+
+**3. Start Claude Code inside the repo folder.**
+![Step 3: start claude](docs/setup/step-3.png)
+
+**4. Paste the install prompt (the grey box in Option A below) and press Enter.**
+![Step 4: paste the prompt](docs/setup/step-4.png)
+
+**5. Claude checks your computer and installs everything. Choose "Yes" when it asks.**
+![Step 5: approve](docs/setup/step-5.png)
+
+**6. Done. Paste any video link and say what you want.**
+![Step 6: done](docs/setup/step-6.png)
+
+---
+
 ## Option A: let the AI install it for you (easiest)
 
 1. Install **Claude Code** if you don't have it: https://claude.com/claude-code
